@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include "includes/header.html" %}
+    <section class="page_not_found">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow-sm mt-5">
+                        <div class="card-body p-4">
+                            <h2 class="text-center mb-4">Eğitmen Kaydet</h2>
+                            <form method="post" class="needs-validation" novalidate>
+                                {% csrf_token %}
+                                <!-- Ad -->
+                                <div class="mb-3">
+                                    <label for="{{ form.first_name.id_for_label }}" class="form-label">Ad</label>
+                                    {{ form.first_name.errors }}
+                                    <input type="text" name="first_name" class="form-control" id="{{ form.first_name.id_for_label }}" required>
+                                </div>
+
+                                <!-- Soyad -->
+                                <div class="mb-3">
+                                    <label for="{{ form.last_name.id_for_label }}" class="form-label">Soyad</label>
+                                    {{ form.last_name.errors }}
+                                    <input type="text" name="last_name" class="form-control" id="{{ form.last_name.id_for_label }}" required>
+                                </div>
+
+                                <!-- E-posta -->
+                                <div class="mb-3">
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">E-posta</label>
+                                    {{ form.email.errors }}
+                                    <input type="email" name="email" class="form-control" id="{{ form.email.id_for_label }}" required>
+                                </div>
+                                
+                                <!-- Kullanıcı Adı -->
+                                <div class="mb-3">
+                                    <label for="{{ form.username.id_for_label }}" class="form-label">Kullanıcı Adı</label>
+                                    {{ form.username.errors }}
+                                    <input type="text" name="username" class="form-control" id="{{ form.username.id_for_label }}" required>
+                                </div>
+
+                                <!-- Şifre -->
+                                <div class="mb-3">
+                                    <label for="{{ form.password1.id_for_label }}" class="form-label">Şifre</label>
+                                    {{ form.password1.errors }}
+                                    <input type="password" name="password1" class="form-control" id="{{ form.password1.id_for_label }}" required>
+                                </div>
+
+                                <!-- Şifre Tekrar -->
+                                <div class="mb-3">
+                                    <label for="{{ form.password2.id_for_label }}" class="form-label">Şifre (Tekrar)</label>
+                                    {{ form.password2.errors }}
+                                    <input type="password" name="password2" class="form-control" id="{{ form.password2.id_for_label }}" required>
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">Kayıt Ol</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %} 

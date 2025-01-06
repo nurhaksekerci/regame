@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="login_register section-padding">
+    <div class="container">
+        <div class="row">				
+            <div class="col-lg-10 offset-lg-1 col-xs-12 wow fadeIn">
+                <div class="register">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <h4 class="login_register_title">{{ list_title }}</h4>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="text-center">Şirket</th>
+                                <th class="text-center">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in data %}
+                                <tr id="obj-{{ obj.id }}">
+                                    <td>
+                                        {{ obj.name }}
+                                    </td>
+                                    <td>
+                                        <button hx-get="{% url 'create_classroom_company' obj.id %}" hx-target="#presentions" hx-swap="innerHTML" class="btn btn-sm btn-success">Seç</button>     
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                <div id="presentions">
+
+                </div>
+            </div><!--- END COL -->
+        </div><!--- END ROW -->
+    </div><!--- END CONTAINER -->
+</section>
+{% endblock content %}

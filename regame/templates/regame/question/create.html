@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="page_not_found">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">{{ presentation.name }} - Yeni Soru</h2>
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="question_number" class="form-label">Soru No</label>
+                                <input type="number" class="form-control" id="question_number" name="question_number" required min="1">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="question_text" class="form-label">Soru Metni</label>
+                                <textarea class="form-control" id="question_text" name="question_text" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Kaydet</button>
+                                <a href="{% url 'question_list' company.id presentation.id %}" class="btn btn-secondary">İptal</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

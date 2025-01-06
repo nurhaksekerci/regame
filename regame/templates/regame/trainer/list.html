@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="page_not_found">
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col">
+                <h2>Eğitmenler</h2>
+            </div>
+            <div class="col text-end">
+                <a href="{% url 'register' %}" class="btn btn-primary">Yeni Eğitmen Ekle</a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">Ad Soyad</th>
+                        <th class="text-center">E-posta</th>
+                        <th class="text-center">Kayıt Tarihi</th>
+                        <th class="text-center">Durum</th>
+                        <th class="text-center">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trainer in trainers %}
+                    <tr>
+                        {% for value in trainer.values %}
+                        <td class="text-center {% if forloop.counter == 4 %}{% if value == 'Aktif' %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                            {{ value }}
+                        </td>
+                        {% endfor %}
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="{% url 'update_trainer' trainer.id %}" class="btn btn-sm btn-info">Güncelle</a>
+                                <a href="#" class="btn btn-sm {% if trainer.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                                    {% if trainer.is_active %}
+                                        Pasifleştir
+                                    {% else %}
+                                        Aktifleştir
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">Henüz eğitmen bulunmuyor.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %} 

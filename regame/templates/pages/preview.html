@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+{% load static %}
+{% load regame_tags %}
+
+{% block content %}
+<section class="preview-section">
+    <div class="container">
+        <div class="card mt-4">
+            <!-- PDF İndirme Butonu -->
+            <div class="text-end px-4 mt-3">
+                <button onclick="generatePDF()" class="btn btn-primary">
+                    <i class="fas fa-file-pdf me-2"></i>PDF Olarak İndir
+                </button>
+            </div>
+
+            <!-- PDF içeriği başlangıcı -->
+            <div id="pdfContent">
+                <!-- Üst Başlık -->
+                <div class="header-section">
+                    <div class="row g-0">
+                        <div class="col-md-5">
+                            <h2 class="title-blue">{{ presentation.name|upper}}</h2>
+                        </div>
+                        <div class="col-md-4">
+                            <table class="broker-info">
+                                <tr>
+                                    <td class="label"><b>BROKER ADI:</b></td>
+                                    <td class="value">{{ participant.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><b>OFİS ADI:</b> </td>
+                                    <td class="value">{{ participant.office|default:"" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            {% if classroom.company.logo %}
+                                <img src="{{ classroom.company.logo.url }}" alt="Logo" class="company-logo">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cevaplar Bölümü -->
+                <div class="answers-section">
+                    {% for answer in answers %}
+                    <div class="answer-row">
+                        <div class="question-cell">
+                            <div class="question-box">
+                                <h5>{{ answer.question_text }}</h5>
+                            </div>
+                        </div>
+                        <div class="answer-cell">
+                            <div class="answer-box">
+                                <p>{{ answer.answer_text }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- PDF içeriği sonu -->
+        </div>
+    </div>
+</section>
+
+<style>
+.preview-section {
+    min-height: 100vh;
+    background: #fff;
+    padding: 20px 0;
+}
+
+.card {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.header-section {
+    padding: 20px;
+    border-bottom: none;
+}
+
+.title-blue {
+    color: #0066b2;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    padding: 10px 0;
+    text-transform: uppercase;
+}
+
+.broker-info {
+    padding: 0 15px;
+}
+
+.info-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.info-row span {
+    font-weight: bold;
+}
+
+.info-row .info-value {
+    font-weight: normal;
+}
+
+.company-logo {
+    max-height: 70px;
+    margin-right: 15px;
+}
+
+.answers-section {
+    padding: 20px;
+}
+
+.answer-row {
+    display: flex;
+    gap: 0;
+    margin-bottom: 10px;
+}
+
+.question-cell {
+    flex: 0 0 33.333%;
+    padding-right: 5px;
+}
+
+.answer-cell {
+    flex: 0 0 66.666%;
+    padding-left: 5px;
+}
+
+.question-box {
+    border: 2px solid #000;
+    padding: 15px;
+    height: 100%;
+    background: white;
+}
+
+.answer-box {
+    border: 2px solid #000;
+    padding: 15px;
+    height: 100%;
+    background: white;
+}
+
+.question-box h5 {
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.answer-box p {
+    margin: 0;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .answer-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .question-cell,
+    .answer-cell {
+        flex: 0 0 100%;
+        padding: 0;
+    }
+}
+
+@media print {
+    .btn-primary {
+        display: none;
+    }
+    
+    .preview-section {
+        padding: 0;
+        background: white;
+    }
+    
+    .card {
+        box-shadow: none !important;
+    }
+
+    #pdfContent {
+        padding: 15px;
+        font-size: 12px;
+    }
+
+    .header-section {
+        margin-bottom: 15px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 15px;
+    }
+
+    .title-blue {
+        font-size: 18px;
+        padding: 5px 0;
+    }
+
+    .broker-info {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .info-row {
+        gap: 2px !important;
+        margin-bottom: 1px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .info-row > span:first-child {
+        font-size: 7px !important;
+        min-width: 50px !important;
+        font-weight: normal !important;
+        white-space: nowrap !important;
+        display: inline-block !important;
+    }
+
+    .info-row > span.info-value {
+        font-size: 7px !important;
+        max-width: 100px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        font-weight: normal !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .company-logo {
+        max-height: 50px;
+        margin-right: 10px;
+    }
+
+    .answers-section {
+        padding: 10px;
+    }
+
+    .answer-row {
+        margin-bottom: 8px;
+    }
+
+    .question-box, 
+    .answer-box {
+        padding: 10px;
+    }
+
+    .question-box h5 {
+        font-size: 12px;
+    }
+
+    .answer-box p {
+        font-size: 12px;
+    }
+
+    .broker-info {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .broker-info td {
+        padding: 0 !important;
+        line-height: 1 !important;
+        font-size: 6px !important;
+        white-space: nowrap !important;
+    }
+
+    .broker-info .label {
+        width: 45px !important;
+    }
+
+    .broker-info .label b {
+        font-size: 6px !important;
+        font-weight: bold !important;
+        white-space: nowrap !important;
+        display: inline-block !important;
+    }
+
+    .broker-info .value {
+        max-width: 80px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        padding-left: 2px !important;
+        font-weight: normal !important;
+    }
+
+    .title-blue {
+        font-size: 16px !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .company-logo {
+        max-height: 40px !important;
+    }
+
+    .header-section {
+        margin-bottom: 10px !important;
+        padding: 10px !important;
+    }
+}
+</style>
+
+<!-- Font Awesome ve html2pdf.js -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+function generatePDF() {
+    // PDF oluşturma seçenekleri
+    const opt = {
+        margin: 0.5,
+        filename: '{{ presentation.name }}_{{ participant.name }}.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+            scale: 2,
+            useCORS: true, // Logo için cross-origin desteği
+            logging: true
+        },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+
+    // PDF'e dönüştürülecek element
+    const element = document.getElementById('pdfContent');
+
+    // PDF oluştur ve indir
+    html2pdf().set(opt).from(element).save().catch(err => {
+        console.error('PDF oluşturma hatası:', err);
+        alert('PDF oluşturulurken bir hata oluştu.');
+    });
+}
+</script>
+{% endblock %} 

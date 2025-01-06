@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="page_not_found">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">Sınıf Oluştur</h2>
+                        
+                        <div class="text-center mb-4">
+                            <p><strong>Şirket:</strong> {{ company.name }}</p>
+                            <p><strong>Sunum:</strong> {{ presentation.name }}</p>
+                        </div>
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Sınıf Oluştur</button>
+                                <a href="{% url 'select_presentation_for_classroom' company.id %}" class="btn btn-secondary">Geri Dön</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="page_not_found">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm mt-5">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">Eğitmen Güncelle</h2>
+                        
+                        <form method="post" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            <!-- Ad -->
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label">Ad</label>
+                                <input type="text" name="first_name" class="form-control" id="first_name" value="{{ trainer.first_name }}" required>
+                            </div>
+
+                            <!-- Soyad -->
+                            <div class="mb-3">
+                                <label for="last_name" class="form-label">Soyad</label>
+                                <input type="text" name="last_name" class="form-control" id="last_name" value="{{ trainer.last_name }}" required>
+                            </div>
+
+                            <!-- E-posta -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">E-posta</label>
+                                <input type="email" name="email" class="form-control" id="email" value="{{ trainer.email }}" required>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Güncelle</button>
+                                <a href="{% url 'trainer_list' %}" class="btn btn-secondary">İptal</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

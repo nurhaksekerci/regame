@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="page_not_found">
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col">
+                <h2>Şirketler</h2>
+            </div>
+            <div class="col text-end">
+                <a href="{% url 'create_company' %}" class="btn btn-primary">Yeni Şirket Ekle</a>
+                <a href="{% url 'select_company_for_classroom' %}" class="btn btn-success">Sınıf Oluştur</a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;" class="text-center">Şirket Adı</th>
+                        <th style="width: 15%;" class="text-center">Logo</th>
+                        <th style="width: 20%;" class="text-center">Oluşturulma Tarihi</th>
+                        <th style="width: 10%;" class="text-center">Durum</th>
+                        <th style="width: 30%;" class="text-center">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                    <tr id="obj-{{company.id}}">
+                        {% include "includes/company-tr.html" with obj=company %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %} 

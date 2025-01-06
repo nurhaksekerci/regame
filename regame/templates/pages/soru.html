@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="question-section" {% if presentation.bg_image %}style="background-image: url('{{ presentation.bg_image.url }}');"{% endif %}>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg mt-5">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <img src="{% static 'assets/img/regame-logo.png' %}" alt="Logo" style="max-width: 150px;">
+                            <h2 class="mt-4">{{ presentation.name }}</h2>
+                            <p class="text-muted">Soru <span id="currentQuestionNumber">1</span>/{{ questions|length }}</p>
+                        </div>
+
+                        <form id="answerForm" method="post" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            <input type="hidden" name="answers" id="answersJson">
+                            
+                            <div id="questions">
+                                {% for question in questions %}
+                                <div class="question-box mb-4" data-question-number="{{ question.question_number }}" style="display: none; {% if presentation.bg_image %}background-image: url('{{ presentation.bg_image.url }}');{% endif %}">
+                                    <div class="question-overlay" style="opacity: 0.7;">
+                                        <h4>Soru {{ question.question_number }}</h4>
+                                        <p class="question-text">{{ question.question_text }}</p>
+                                        <div class="mb-3">
+                                            <label class="form-label">Cevabınız</label>
+                                            <textarea class="form-control answer-input" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="button" id="prevButton" class="btn btn-secondary btn-lg" style="display: none;">Önceki Soru</button>
+                                <button type="button" id="nextButton" class="btn btn-primary btn-lg">Sonraki Soru</button>
+                                <button type="submit" id="submitButton" class="btn btn-success btn-lg" style="display: none;">Cevapları Gönder</button>
+                            </div>
+                        </form>
+
+                        <div class="progress mt-4">
+                            <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.question-section {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0d5ff9 0%, #0c4bc7 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 40px 0;
+    position: relative;
+}
+
+.question-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(13, 95, 249, 0.85);
+    z-index: 0;
+}
+
+.question-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+}
+
+.card-body {
+    position: relative;
+    z-index: 1;
+}
+
+.question-box {
+    position: relative;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 300px;
+}
+
+.question-overlay {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    height: 100%;
+}
+
+.question-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(13, 95, 249, 0.1);
+    border-radius: 10px;
+}
+
+.question-text {
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.form-control {
+    border-radius: 10px;
+}
+
+.btn {
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 4px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Önce tüm değişkenleri tanımlayalım
+    const questions = document.querySelectorAll('.question-box');
+    const totalQuestions = questions.length;
+    let currentQuestion = 0;
+    const answers = [];
+    
+    // Butonları başta tanımlayalım
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    const submitButton = document.getElementById('submitButton');
+
+    // Fonksiyonları tanımlayalım
+    function showQuestion(index) {
+        questions.forEach((q, i) => {
+            q.style.display = i === index ? 'block' : 'none';
+        });
+
+        // Butonları güncelle
+        prevButton.style.display = index > 0 ? 'block' : 'none';
+        nextButton.style.display = index < totalQuestions - 1 ? 'block' : 'none';
+        submitButton.style.display = index === totalQuestions - 1 ? 'block' : 'none';
+
+        // Soru numarasını güncelle
+        document.getElementById('currentQuestionNumber').textContent = index + 1;
+    }
+
+    function updateProgress() {
+        const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+        document.getElementById('progressBar').setAttribute('aria-valuenow', progress);
+    }
+
+    function saveCurrentAnswer() {
+        const currentBox = questions[currentQuestion];
+        const questionNumber = parseInt(currentBox.dataset.questionNumber);
+        const answerText = currentBox.querySelector('.answer-input').value;
+
+        const existingAnswerIndex = answers.findIndex(a => a.question_number === questionNumber);
+        if (existingAnswerIndex > -1) {
+            answers[existingAnswerIndex].answer_text = answerText;
+        } else {
+            answers.push({
+                question_number: questionNumber,
+                answer_text: answerText
+            });
+        }
+    }
+
+    function validateCurrentAnswer() {
+        const currentBox = questions[currentQuestion];
+        const textarea = currentBox.querySelector('.answer-input');
+        if (!textarea.value.trim()) {
+            alert('Lütfen soruyu cevaplayın.');
+            return false;
+        }
+        return true;
+    }
+
+    // Event listener'ları ekleyelim
+    prevButton.addEventListener('click', function() {
+        if (currentQuestion > 0) {
+            saveCurrentAnswer();
+            currentQuestion--;
+            showQuestion(currentQuestion);
+            updateProgress();
+        }
+    });
+
+    nextButton.addEventListener('click', function() {
+        if (validateCurrentAnswer()) {
+            saveCurrentAnswer();
+            currentQuestion++;
+            showQuestion(currentQuestion);
+            updateProgress();
+        }
+    });
+
+    document.getElementById('answerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (validateCurrentAnswer()) {
+            saveCurrentAnswer();
+            document.getElementById('answersJson').value = JSON.stringify(answers);
+            this.submit();
+        }
+    });
+
+    // Başlangıç durumunu ayarlayalım
+    showQuestion(currentQuestion);
+    updateProgress();
+});
+</script>
+{% endblock %}

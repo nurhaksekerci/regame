@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "includes/header2.html" %}
+<section class="page_not_found">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">Şirket Güncelle</h2>
+                        
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Şirket Adı</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ company.name }}" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="logo" class="form-label">Logo</label>
+                                {% if company.logo %}
+                                    <div class="mb-2">
+                                        <img src="{{ company.logo.url }}" alt="Mevcut Logo" style="max-width: 100px;">
+                                    </div>
+                                {% endif %}
+                                <input type="file" class="form-control" id="logo" name="logo">
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Güncelle</button>
+                                <a href="{% url 'company_list' %}" class="btn btn-secondary">İptal</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

@@ -1,0 +1,22 @@
+{% for value in obj.values %}
+    <td class="text-center {% if forloop.counter == 4 %}{% if value == 'Aktif' %}text-success{% else %}text-danger{% endif %}{% endif %}">
+        {% if forloop.counter == 2 and value %}
+            <a href="{{ value }}" target="_blank">Görsel</a>
+        {% else %}
+            {{ value }}
+        {% endif %}
+    </td>
+{% endfor %}
+<td>
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{% url 'update_presentation' company.id obj.id %}" class="btn btn-sm btn-info">Güncelle</a>
+        <a href="{% url 'delete_presentation' company.id obj.id %}" class="btn btn-sm {% if obj.is_active %}btn-danger{% else %}btn-success{% endif %}">
+            {% if obj.is_active %}
+                Pasifleştir
+            {% else %}
+                Aktifleştir
+            {% endif %}
+        </a>
+        <a href="{% url 'question_list' company.id obj.id %}" class="btn btn-sm btn-primary">Sorular</a>
+    </div>
+</td> 

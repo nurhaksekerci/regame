@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>{{ title }}</title>			
+		<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+
+		<link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">		
+		<link rel="stylesheet" href="{% static 'assets/fonts/themify-icons.css' %}">
+		<link rel="stylesheet" href="{% static 'assets/css/line-awesome.css' %}">
+		<link rel="stylesheet" href="{% static 'assets/fonts/fontawesome/fontawesome.css' %}">
+		<link rel="stylesheet" href="{% static 'assets/owlcarousel/css/owl.carousel.min.css' %}">
+		<link rel="stylesheet" href="{% static 'assets/owlcarousel/css/owl.theme.default.min.css' %}">	
+		<link rel="stylesheet" href="{% static 'assets/css/preloader.css' %}">
+		<link rel="stylesheet" href="{% static 'assets/css/jquery-simple-mobilemenu.css' %}">	
+		<link rel="stylesheet" href="{% static 'assets/css/magnific-popup.css' %}">	
+		<link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">		
+		<link rel="stylesheet" href="{% static 'assets/css/YouTubePopUp.css' %}">	
+		<link rel="stylesheet" href="{% static 'assets/css/slick.css' %}">	
+		<link rel="stylesheet" href="{% static 'assets/css/slick-theme.css' %}">					
+		<link rel="stylesheet" href="{% static 'assets/css/style.css' %}">		
+		<link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+		<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+
+		<style>
+			#navigation {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				z-index: 1000; /* Header'ın üstte görünmesini sağlar */
+				background-color: #fff; /* Header'ın arka plan rengi */
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sabit header için hafif gölge */
+				padding: 10px 0; /* Daha düzgün bir görünüm için padding */
+			}
+		</style>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+		<!-- Toastr CSS -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+		
+		<!-- Toastr için jQuery gerekli -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		
+		<!-- Toastr JS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+		<script>
+			// Toastr ayarları
+			toastr.options = {
+				"closeButton": true,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": true,
+				"positionClass": "toast-bottom-right",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": "300",
+				"hideDuration": "1000",
+				"timeOut": "3000",
+				"extendedTimeOut": "1000",
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+			}
+
+			// Django mesajlarını Toastr ile göster
+			$(document).ready(function() {
+				{% if messages %}
+					{% for message in messages %}
+						{% if message.tags == 'success' %}
+							toastr.success('{{ message }}');
+						{% elif message.tags == 'error' %}
+							toastr.error('{{ message }}');
+						{% elif message.tags == 'warning' %}
+							toastr.warning('{{ message }}');
+						{% elif message.tags == 'info' %}
+							toastr.info('{{ message }}');
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			});
+		</script>
+	</head>
+	
+	<body>
+		<div class="preloader">
+			<div class="book-style">
+			  <div class="inner">
+				<div class="left"></div>
+				<div class="middle"></div>
+				<div class="right"></div>
+			  </div>
+			  <ul>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			  </ul>
+			</div>
+		</div>	
+		{% block content %}{% endblock content %}
+		{% include "includes/footer.html" %}
+
+		<script src="{% static 'assets/js/jquery.min.js' %}" ></script>
+		<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'assets/js/jquery-simple-mobilemenu.js' %}"></script>
+		<script src="{% static 'assets/js/imagesloaded.pkgd.min.js' %}"></script>
+		<script src="{% static 'assets/js/masonry.pkgd.min.js' %}" ></script>			
+		<script src="{% static 'assets/js/modernizr-2.8.3.min.js' %}"></script>																	
+		<script src="{% static 'assets/owlcarousel/js/owl.carousel.min.js' %}"></script>
+		<script src="{% static 'assets/js/waypoints.min.js' %}"></script>		
+		<script src="{% static 'assets/js/jquery.counterup.min.js' %}"></script>
+		<script src="{% static 'assets/js/jquery.appear.js' %}"></script>
+		<script src="{% static 'assets/js/jquery.magnific-popup.js' %}"></script>	
+		<script src="{% static 'assets/js/YouTubePopUp.jquery.js' %}"></script>
+		<script src="{% static 'assets/js/yvpopup-active.js' %}"></script>		
+		<script src="{% static 'assets/js/scrolltopcontrol.js' %}"></script>			
+		<script src="{% static 'assets/js/wow.js' %}"></script>		
+		<script src="{% static 'assets/js/slick.js' %}"></script>									
+		<script src="{% static 'assets/js/scripts.js' %}"></script>
+		
+	</body>
+</html>

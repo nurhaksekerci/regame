@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="page_not_found">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center wow fadeIn">
+                <img src="{% static 'assets/img/404.svg' %}" alt="404"> 
+                <h2>Page not found: /error</h2>
+                <p>Please try searching for some other page.</p>
+                <a href="index.html" class="bg_btn bt">Back To Home</a>
+            </div> <!-- End Col -->
+
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,114 @@
+{% load static %}
+<footer class="footer">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="footer_logo">
+                    <a href="{% url 'dashboard' %}">
+                        <img width="149" src="{% static 'assets/img/regame-logo.png' %}" alt="ReGame">
+                    </a>
+                    <p class="mt-3">
+                        ReGame, interaktif sunum ve eğitim deneyimini 
+                        oyunlaştırma ile birleştiren yenilikçi bir platformdur.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="footer_widget">
+                    <h4>Hızlı Linkler</h4>
+                    <ul>
+                        <li><a href="{% url 'dashboard' %}">Anasayfa</a></li>
+                        <li><a href="{% url 'company_list' %}">Şirketler</a></li>
+                        <li><a href="{% url 'trainer_list' %}">Eğitmenler</a></li>
+                        <li><a href="{% url 'select_company_for_classroom' %}">Sınıf Oluştur</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="footer_widget">
+                    <h4>İletişim</h4>
+                    <ul class="footer_contact">
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>info@regame.com.tr</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <span>+90 (212) 123 45 67</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>İstanbul, Türkiye</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="copy_right text-center">
+                    <p>© {% now "Y" %} ReGame. Tüm hakları saklıdır.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+.footer {
+    background: #0d5ff9;
+    padding: 60px 0 30px;
+    color: #fff;
+}
+
+.footer_widget h4 {
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+.footer_widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer_widget ul li {
+    margin-bottom: 12px;
+}
+
+.footer_widget ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer_widget ul li a:hover {
+    opacity: 0.8;
+}
+
+.footer_contact li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.footer_contact li i {
+    width: 20px;
+}
+
+.copy_right {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.copy_right p {
+    margin: 0;
+    color: rgba(255,255,255,0.8);
+}
+</style>

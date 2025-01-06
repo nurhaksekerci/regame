@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="login_register section-padding">
+    <div class="container">
+        <div class="row">				
+            <div class="col-lg-6 col-xs-12 wow fadeIn">
+                <div class="register">
+                    <h4 class="login_register_title">{{ list_title }}</h4>
+                    <table class="table table-striped table-hover table-bordered align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center">Ad</th>
+                                <th class="text-center">Arkaplan</th>
+                                <th class="text-center">Aksiyonlar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for presentation in presentations %}
+                                <tr>
+                                    <td class="text-center">{{ presentation.name }}</td>
+                                    {% if presentation.bg_image %}
+                                        <td><a href="{{ presentation.bg_image.url }}" target="_blank">Arkaplan</a></td>
+                                    {% else %}
+                                        <td>Yok</td>
+                                    {% endif %}
+                                    <td class="text-center">
+                                        {% if presentation.is_active %}
+                                        <a href="{% url 'update_presentation' presentation.id %}" class="btn btn-sm btn-info">Güncelle</a>
+                                        <a href="{% url 'delete_presentation' presentation.id %}" class="btn btn-sm btn-danger">Sil</a>
+                                        <a href="{% url 'presentation_detail' presentation.id %}" class="btn btn-sm btn-success">Sorular</a>
+                                        {% else %}
+                                        <a href="{% url 'delete_presentation' presentation.id %}" class="btn btn-sm btn-danger">Yükle</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">Henüz bir soru eklenmedi.</td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                                        
+                </div>
+            </div>
+            <div class="col-lg-6 col-xs-12 wow fadeIn">
+                <div class="register">
+                    <h4 class="login_register_title">{{ form_title }}</h4>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        <div class="form-group col-lg-12">
+                            <button class="bg_btn bt" type="submit" name="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!--- END COL -->
+        </div><!--- END ROW -->
+    </div><!--- END CONTAINER -->
+</section>
+{% endblock content %}

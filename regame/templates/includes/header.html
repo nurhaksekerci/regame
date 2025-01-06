@@ -1,0 +1,184 @@
+{% load static %}
+<header id="navigation">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3 left-col align-self-center">
+                <div class="site-logo">
+                    <a href="{% url 'dashboard' %}"><img width="149" src="{% static 'assets/img/regame-logo.png' %}" alt="Edumon"></a>
+                </div>
+
+            </div><!-- End Col -->		
+
+            <div style="height=100%;" class="col-9 justify-content-end d-flex align-items-center">
+                <nav id="main-menu">
+                    <ul>
+                        <li>
+                            <a class="text-white" href="{% url 'dashboard' %}">Anasayfa</a>
+                        </li>
+                        <li class="menu-item-has-children">
+                            <a href="#" class="text-white">İşlemler</a>
+                            <ul class="sub-menu">
+                                <li><a href="{% url 'trainer_list' %}">Eğitmenler</a></li>
+                                <li><a href="{% url 'company_list' %}">Şirketler</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="text-white" href="{% url 'select_company_for_classroom' %}">Sınıf Oluştur</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div><!-- End Col -->		            
+            <ul class='mobile_menu'>
+                <li>
+                    <a href="contact.html">Anasayfa</a>
+                </li>
+                <li class="menu-item-has-children">
+                    <a href="#">İşlemler</a>
+                    <ul class="sub-menu">
+                        <li><a href="{% url 'trainer_list' %}">Eğitmenler</a></li>
+                        <li><a href="{% url 'company_list' %}">Şirketler</a></li>
+                    </ul>
+                </li>	
+                <li>
+                    <a href="standard-blog.html">Sınıf Oluştur</a>
+                </li>
+
+                
+            </ul>	
+        </div>
+    </div>
+    
+    <!-- Start Drawer -->
+    <div id="mini_cart" class="min_cart_wrapper">
+        <div class="cart_drawer">
+            <div class="cart_top">
+                <a href="#" class="cart_close"><i class='bx bx-x'></i></a>
+                <h3 class="title">Courses List</h3>
+                <span class="cart_number">
+                    3
+                </span>
+            </div>
+            
+            <div class="mini_cart_list">
+                <ul>
+                    <li class="d-flex">
+                        <div class="thumb_img_cartmini">
+                            <a href="course-details.html" class="mc_img">
+                                <img src="assets/img/mcart/1.jpg" alt="Product Name" >
+                            </a>
+                        </div>	
+                        
+                        <div class="product-detail">
+                            <h3 class="product_name_mini">
+                                 <a href="course-details.html">
+                                    Photography Crash Course
+                                </a>
+                            </h3>
+                            <div class="product_info">
+                                <div class="product_quanity">QTY : 1 </div>
+                                <div class="product_price">
+                                    <span class="price_sale">$25.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="produc_remove">
+                            <a href="#" class="remove-product">
+                                <i class='bx bx-trash'></i>
+                            </a>              
+                        </div>
+                    </li>					
+                    
+                    <li class="d-flex">
+                        <div class="thumb_img_cartmini">
+                            <a href="course-details.html" class="mc_img">
+                                <img src="assets/img/mcart/2.jpg" alt="Product Name" >
+                            </a>
+                        </div>	
+                        
+                        <div class="product-detail">
+                            <h3 class="product_name_mini">
+                                 <a href="course-details.html">
+                                    Photography Crash Course
+                                </a>
+                            </h3>
+                            <div class="product_info">
+                                <div class="product_quanity">QTY : 1 </div>
+                                <div class="product_price">
+                                    <span class="price_sale">$25.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="produc_remove">
+                            <a href="#" class="remove-product">
+                                <i class='bx bx-trash'></i>
+                            </a>              
+                        </div>
+                    </li>					
+                    
+                    <li class="d-flex">
+                        <div class="thumb_img_cartmini">
+                            <a href="course-details.html" class="mc_img">
+                                <img src="assets/img/mcart/3.jpg" alt="Product Name" >
+                            </a>
+                        </div>	
+                        
+                        <div class="product-detail">
+                            <h3 class="product_name_mini">
+                                 <a href="course-details.html">
+                                    Photography Crash Course
+                                </a>
+                            </h3>
+                            <div class="product_info">
+                                <div class="product_quanity">QTY : 1 </div>
+                                <div class="product_price">
+                                    <span class="price_sale">$25.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="produc_remove">
+                            <a href="#" class="remove-product">
+                                <i class='bx bx-trash'></i>
+                            </a>              
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="cart_drawer_btm">
+                <div class="sub-total">
+                    <span class="total-title float-start">Total:</span>
+                    <span class="total-price float-end">$75.00</span>
+                </div>
+                
+                <div class="bottom_group">
+                    <a href="cart.html" class="button-viewcart">
+                        <span>View Cart</span>
+                    </a>
+                    <a href="checkout.html" class="button-checkout">
+                        <span>Checkout</span>
+                    </a>
+                </div>
+            </div>
+        </div>				
+    </div>
+    <div class="search_box">
+        <div class="close-btn">
+            <i class="ti-close"></i>
+        </div>
+                        
+        <div class="search-data">
+            <form action="#" method="get">
+                <input type="text" required>
+                <div class="line"></div>
+                <label>Type to search..</label>
+                <button type="submit">
+                    <span class="ti-search"></span>
+                </button>
+            </form>
+        </div>			
+    </div>
+
+</header>

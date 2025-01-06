@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="blog my-5">
+    <div class="container mt-5">
+        <div class="row mt-5">
+            <div class="col-xl-6 col-lg-6 col-md-6 offset-md-3 col-12 wow fadeIn mt-5">
+                <div class="blog-item mt-5" id="blog-item" style="max-width: 600px;">
+                    <div class="blog-image" style="max-width: 600px; height:300px; background-image:url('{{ classroom.presentation.bg_image.url }}'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+                        <div class="row">
+                            <div class="col-5">
+                                <h6 class="text-center question-title" style="padding-top: 75px; padding-left: 30px; color: black;">
+                                    {% if questions %}
+                                        {{ questions.0.question_text|upper }}
+                                    {% else %}
+                                        SORULAR YÜKLENEMEDİ
+                                    {% endif %}
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <div class="question-options">
+                            <form id="question-form" action="{{ request.path }}" method="post">
+                                {% csrf_token %}
+                                <label for="answer">Cevabınız:</label><br />
+                                <textarea id="answer" name="answer" rows="6" style="width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 16px; resize: vertical;"></textarea>
+                                <br /><br />
+                                <button type="submit" class="submit-btn" style="background-color: #0D5FF9; color: white; font-size: 16px; padding: 12px 30px; border-radius: 50px; border: none; cursor: pointer; transition: all 0.3s ease-in-out;">
+                                    Kaydet
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="answers-summary" style="display: none; margin-top: 20px;">
+                    <div style="height: 100px;" class="d-flex justify-content-between align-item-center">
+                        <h5 class="text-primary">OFİS HEDEF VE EYLEMLERİMİZ</h5>
+                        <div class="broker">
+                            <p>Broker Adı: {{ participant.name }}</p>
+                            <p>Ofis Adı: {{ participant.office }}</p>
+                        </div>
+                        <div class="" style="width: 50px; height: 50px;">
+                            <img src="{{ classroom.company.logo.url }}" alt="Logo">
+                        </div>
+                    </div>
+                    <table id="answers-table" style="width: 100%; text-align: left; border-collapse: separate; border-spacing: 5px;">
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <button id="save-button" style="margin-top: 20px; background-color: #0D5FF9; color: white; font-size: 16px; padding: 12px 30px; border-radius: 50px; border: none; cursor: pointer;">
+                        Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("#question-form");
+        const answerInput = document.querySelector("#answer");
+        const answersTable = document.querySelector("#answers-table tbody");
+        const answersSummary = document.querySelector("#answers-summary");
+        const saveButton = document.querySelector("#save-button");
+        const questionTitle = document.querySelector(".question-title");
+        const blogItem = document.querySelector("#blog-item");
+
+        let currentQuestionIndex = 0;
+        const questions = {{ questions|safe }};
+        const answers = [];
+
+        // Form gönderimini engelle
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const answer = answerInput.value.trim();
+            if (answer === "") {
+                alert("Lütfen bir cevap girin.");
+                return;
+            }
+
+            // Cevabı kaydet ve tabloya ekle
+            answers.push({ question: questions[currentQuestionIndex].question_text, answer });
+            const row = document.createElement("tr");
+            row.innerHTML = `<td style='border: 2px solid black; padding: 10px;'>${questions[currentQuestionIndex].question_text}</td><td style='border: 2px solid black; padding: 10px;'><textarea rows='2' style='width: 100%; border: none;'>${answer}</textarea></td>`;
+            answersTable.appendChild(row);
+
+            // Sonraki soruya geç
+            answerInput.value = "";
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                // Yeni soruyu yükle
+                questionTitle.innerText = questions[currentQuestionIndex].question_text.toUpperCase();
+            } else {
+                // Tüm sorular cevaplandıysa özeti göster
+                blogItem.remove();
+                answersSummary.style.display = "block";
+            }
+        });
+
+        // Kaydet butonuna tıklandığında veriyi gönder
+        saveButton.addEventListener("click", function () {
+            const updatedAnswers = [];
+            answersTable.querySelectorAll("tr").forEach((row, index) => {
+                const updatedAnswer = row.querySelector("textarea").value.trim();
+                updatedAnswers.push({
+                    question: questions[index].question_text,
+                    answer: updatedAnswer,
+                });
+            });
+
+            fetch('{% url "save_answers" classroom.code participant.id %}', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}",
+                },
+                body: JSON.stringify({ answers: updatedAnswers }),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        alert("Yanıtlarınız başarıyla kaydedildi!");
+
+                        // Kaydet butonunu kaldır
+                        saveButton.remove();
+
+                        // Yeni "PDF Olarak Kaydet" butonunu oluştur
+                        const pdfButton = document.createElement("button");
+                        pdfButton.textContent = "PDF Olarak Kaydet";
+                        pdfButton.id = "save_pdf";
+                        pdfButton.style.cssText = `
+                            margin-top: 20px;
+                            background-color: #0D5FF9;
+                            color: white;
+                            font-size: 16px;
+                            padding: 12px 30px;
+                            border-radius: 50px;
+                            border: none;
+                            cursor: pointer;
+                            transition: all 0.3s ease-in-out;
+                        `;
+
+                        // Yeni butonu özeti içeren div'e ekle
+                        const answersSummary = document.querySelector("#answers-summary");
+                        answersSummary.appendChild(pdfButton);
+
+                        // "PDF Olarak Kaydet" butonuna tıklama olayı ekle
+                        pdfButton.addEventListener("click", () => {
+                            const { jsPDF } = window.jspdf;
+
+                            if (!jsPDF) {
+                                alert("jsPDF kütüphanesi yüklenemedi.");
+                                return;
+                            }
+
+                            const doc = new jsPDF();
+                            const answersSummaryElement = document.querySelector('#answers-summary');
+
+                            // "PDF Olarak Kaydet" butonunu PDF'de gizlemek için geçici olarak kaldır
+                            pdfButton.style.display = "none";
+
+                            // HTML'yi PDF'ye dönüştür
+                            html2canvas(answersSummaryElement, {
+                                scale: 1, // PDF kalite ölçeği
+                            }).then((canvas) => {
+                                const imgData = canvas.toDataURL("image/png");
+                                const imgWidth = 190; // PDF genişliği (mm)
+                                const pageHeight = 295; // PDF yüksekliği (mm)
+                                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                                const position = 10; // PDF'de başlangıç pozisyonu (y)
+
+                                doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                                doc.save('Yanıtlar.pdf');
+
+                                // "PDF Olarak Kaydet" butonunu geri göster
+                                pdfButton.style.display = "block";
+                            }).catch((error) => {
+                                console.error("PDF oluşturulurken bir hata oluştu:", error);
+                                alert("PDF oluşturulamadı. Lütfen tekrar deneyin.");
+                                pdfButton.style.display = "block";
+                            });
+                        });
+                    } else {
+                        alert("Yanıtlar kaydedilirken bir hata oluştu.");
+                    }
+                })
+                .catch(() => alert("Sunucuya bağlanırken bir hata oluştu."));
+        });
+    });
+</script>
+{% endblock content %}

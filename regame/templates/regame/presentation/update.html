@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="page_not_found">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">{{ company.name }} - Sunum Güncelle</h2>
+                        
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Sunum Adı</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ presentation.name }}" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="bg_image" class="form-label">Arka Plan Görseli</label>
+                                {% if presentation.bg_image %}
+                                    <div class="mb-2">
+                                        <img src="{{ presentation.bg_image.url }}" alt="Mevcut Görsel" style="max-width: 100px;">
+                                    </div>
+                                {% endif %}
+                                <input type="file" class="form-control" id="bg_image" name="bg_image">
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Güncelle</button>
+                                <a href="{% url 'presentation_list' company.id %}" class="btn btn-secondary">İptal</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

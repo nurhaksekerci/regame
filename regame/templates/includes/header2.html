@@ -1,0 +1,28 @@
+{% load static %}
+<header id="navigation">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3 left-col align-self-center">
+                <div class="site-logo">
+                    <a href="{% url 'anasayfa' %}"><img width="149" src="{% static 'assets/img/regame-logo.png' %}" alt="Regame"></a>
+                </div>
+
+            </div><!-- End Col -->		
+
+            <div style="height=100%;" class="col-9 justify-content-end d-flex align-items-center">
+                <nav id="main-menu">
+                    <ul>
+                        <li>
+                            <a class="text-white" href="{% url 'login' %}">Giriş Yap</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div><!-- End Col -->		            
+            <ul class='mobile_menu'>
+                <li>
+                    <a href="contact.html">Giriş Yap</a>
+                </li>
+            </ul>	
+        </div>
+    </div>
+</header>

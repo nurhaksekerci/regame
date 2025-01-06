@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="home-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 col-lg-7 col-md-12">
+                <div class="banner-content d-flex align-items-center">
+                    <div class="banner-content-inner">
+                        <img width="298" src="{% static 'assets/img/regame-logo.png' %}" alt="Edumon">
+                        <h2 class="title"><span>{{ classroom.company.name }}</span></h2>
+                        <p>
+                            Sunuma katılmak için QR Kodu okutun<br>
+                            Teşekkürler...<br>
+                            Sınıf kodu: {{ classroom.code }}
+                        </p>
+
+                        <div id="katilimci-info" hx-get="{% url 'update_info' classroom_code=classroom.code %}" hx-trigger="every 5s" hx-target="#katilimci-info" hx-swap="innerHTML">
+                            <h5 class="mt-5 text-white">Toplam Katılımcılar : {{ toplam|default:0 }}</h5>
+                            <h5 class="mb-5 text-white">Bitiren Katılımcılar : {{ bitiren|default:0 }}</h5>
+                        </div>
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="toggle_active">
+                            <button type="submit" class="btn {% if classroom.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                                {% if classroom.is_active %}
+                                    Sınıfı Kapat
+                                {% else %}
+                                    Sınıfı Aç
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner_img" style="width: 500px; height: 500px; background-image: url('{{ classroom.qr_image.url }}'); background-size: contain; background-repeat: no-repeat; background-position: center;">
+        </div>
+
+        <div class="book_icon">
+            <i class='bx bx-book-open'></i>
+        </div>
+
+        <!-- ... diğer şekiller ve animasyonlar aynı ... -->
+    </div>
+</section>
+{% endblock content %}

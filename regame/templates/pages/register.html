@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<section class="login_register section-padding">
+    <div class="container">
+        <div class="row">				
+            <div class="col-lg-6 offset-lg-3 col-xs-12 wow fadeIn">
+                <div class="register">
+                    <h4 class="login_register_title">{{ form_title }}</h4>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        <div class="form-group col-lg-12">
+                            <button class="bg_btn bt" type="submit" name="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!--- END COL -->
+        </div><!--- END ROW -->
+    </div><!--- END CONTAINER -->
+</section>
+{% endblock content %}
